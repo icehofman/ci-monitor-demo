@@ -5,21 +5,31 @@ Vagrant.configure("2") do |config|
  
   config.vm.box = "williamyeh/ubuntu-trusty64-docker"
 
-  # Add forwarded ports
-  config.vm.network "forwarded_port", guest: 3000, host: 3000
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 9090, host: 9090
-  config.vm.network "forwarded_port", guest: 9093, host: 9093
+  # Add forwarded ports docker-compose-ci
   config.vm.network "forwarded_port", guest: 8888, host: 8888
   config.vm.network "forwarded_port", guest: 9000, host: 9000
   config.vm.network "forwarded_port", guest: 5432, host: 5432
   config.vm.network "forwarded_port", guest: 8181, host: 8181
+
+  # Add forwarded ports docker-compose-selenium
   config.vm.network "forwarded_port", guest: 4444, host: 4444
+
+  # Add forwarded ports docker-compose-monitor
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  config.vm.network "forwarded_port", guest: 9090, host: 9090
+  config.vm.network "forwarded_port", guest: 9093, host: 9093
+
+  # Add forwarded ports docker-compose-logs
+  config.vm.network "forwarded_port", guest: 9200, host: 9200
+  config.vm.network "forwarded_port", guest: 9300, host: 9300
+  config.vm.network "forwarded_port", guest: 24224, host: 24224
+  config.vm.network "forwarded_port", guest: 5601, host: 5601
 
   config.vm.synced_folder ".", "/vagrant", disabled: false
   
   config.vm.provider "virtualbox" do |v|
-    v.memory = 4096
+    v.memory = 6144
     v.cpus = 2
   end
 
@@ -39,8 +49,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision :docker_compose,
     yml: [
       "/vagrant/docker-compose-monitor.yml",
+      "/vagrant/docker-compose-logs.yml",
       "/vagrant/docker-compose-ci.yml",
-      "/vagrant/docker-compose-selenium.yml"
+      "/vagrant/docker-compose-selenium.yml"      
     ],
     rebuild: true,
     run: "always"

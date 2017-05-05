@@ -1,2 +1,6 @@
 # Vagrant
 .vagrant/
+# Elasticsearch
+usr/share/elasticsearch/data/nodes/
+# Visual Studio Code
+.vscode/
