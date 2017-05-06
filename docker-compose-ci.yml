@@ -3,19 +3,26 @@ version: '2'
 services:
  nexus:
   build: ./nexus
+  container_name: nexus
   ports:
     - "8181:8081"
   networks:
-      - monitor-net         
+      - monitor-net
+  logging:
+      driver: "fluentd"
+  links:
+    - fluentd                   
 
  jenkins:
   build: ./jenkins
+  container_name: jenkins
   ports:
     - "8888:8080"
   links:
     - nexus
     - sonar
     - sonardb
+    - fluentd
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - /usr/bin/docker:/usr/bin/docker
@@ -29,15 +36,19 @@ services:
     - SONAR_PORT=9000
     - SONAR_DB_PORT=5432
   networks:
-      - monitor-net           
+      - monitor-net
+  logging:
+      driver: "fluentd"                
 
  sonar:
   build: ./sonar
+  container_name: sonar
   ports:
    - "9000:9000"
    - "5432:5432"
   links:    
     - sonardb
+    - fluentd
   depends_on:    
     - sonardb  
   environment:
@@ -45,17 +56,24 @@ services:
    - SONARQUBE_JDBC_USERNAME=sonar
    - SONARQUBE_JDBC_PASSWORD=sonar
   networks:
-      - monitor-net         
+      - monitor-net
+  logging:
+      driver: "fluentd"             
 
  sonardb:
   image: postgres
+  container_name: sonardb
   environment:
    - POSTGRES_USER=sonar
    - POSTGRES_PASSWORD=sonar
   volumes:
     - /opt/postgres/data:/var/lib/postgresql/data
   networks:
-      - monitor-net      
+      - monitor-net
+  logging:
+      driver: "fluentd"
+  links:
+    - fluentd               
 
 networks:
   monitor-net:

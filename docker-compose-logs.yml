@@ -19,6 +19,7 @@ services:
 
   elasticsearch:
     image: elasticsearch
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -31,7 +32,8 @@ services:
       - monitor-net
 
   kibana:
-    image: kibana    
+    image: kibana
+    container_name: kibana    
     ports:
       - "5601:5601"  
     links:
