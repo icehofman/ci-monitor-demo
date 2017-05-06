@@ -4,6 +4,7 @@ services:
 
   fluentd:
     build: ./fluentd
+    container_name: fluentd
     ports:
       - "24224:24224"
       - "24224:24224/udp"
@@ -13,6 +14,8 @@ services:
       - elasticsearch  
     links:
       - elasticsearch
+    networks:
+      - monitor-net  
 
   elasticsearch:
     image: elasticsearch
@@ -24,6 +27,8 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"       
     restart: always
+    networks:
+      - monitor-net
 
   kibana:
     image: kibana    
@@ -31,3 +36,9 @@ services:
       - "5601:5601"  
     links:
       - elasticsearch
+    networks:
+      - monitor-net  
+
+networks:
+  monitor-net:
+    driver: bridge

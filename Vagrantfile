@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", run: "always" do |s|
     s.inline = "docker stop $(docker ps -a -q) -t 90 && docker rm $(docker ps -a -q) -f"
-  end  
+  end 
 
   config.vm.provision :docker
 
