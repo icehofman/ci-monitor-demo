@@ -11,7 +11,7 @@ ENV JAVA_OPTS "$JAVA_OPTS -Duser.country=DE -Duser.language=de -Duser.timezone=E
 # Set the JAVA_HOME variable to make it clear where Java is located
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0
 
-ENV SONAR_VERSION 5.6.3
+ENV SONAR_VERSION 5.6.6
 ENV SONARQUBE_HOME /opt/sonarqube
 
 # Plugin Versions
